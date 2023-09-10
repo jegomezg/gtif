@@ -283,7 +283,19 @@ map.on('singleclick', function(evt) {
     }
 });
 
+document.getElementById('yearSelector').addEventListener('change', function() {
+    if (selectedFeature) { // Only update if there's a selected feature
+        var year = this.value;
+        var obsVariableName = 'obs_series_' + year;
 
+        var hexData = selectedFeature.getProperties();
+        var meanSeries = hexData.mean_series;
+        var stdSeries = hexData.std_series;
+        var obsSeries = hexData[obsVariableName];
+
+        renderTimeSeries(meanSeries, stdSeries, obsSeries);
+    }
+});
 
 
 

@@ -128,9 +128,25 @@ window.onload = initializeEmptyPlot;
 
 
 function renderTimeSeries(mean_series, std_series, obs_series) {
-    const width = 500;
-    const height = 300;
-    const margins = { top: 20, right: 20, bottom: 30, left: 50 };
+    // Assuming your graph container has an ID of 'graph'
+    const graphContainer = document.getElementById('graph');
+
+    // Get the width of the container
+    const containerWidth = graphContainer.clientWidth;
+    
+    // Use a percentage of the container's width for the graph's width
+    const width = containerWidth * 0.95; // 95% of the container's width
+
+    // Set height relative to width for consistent aspect ratio
+    const height = width * 0.7;
+
+    // Set margins relative to width and height
+    const margins = {
+        top: height * 0.02,     // 5% of height
+        right: width * 0.02,    // 4% of width
+        bottom: height * 0.1,   // 10% of height
+        left: width * 0.1       // 10% of width
+    };
 
     const color = d3.scaleOrdinal()
     .domain(["Mean", "Lower Bound", "Observed", "Observed"])

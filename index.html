@@ -46,187 +46,177 @@
                 color: black !important;
             }
             </style>
-            <style>        
-                /* Adjusted styles for new layout */
-                #map {
-                    width: 70%; 
-                    height: 100vh;
-                    border: 1px solid #ffffff;
-                    float: left;
-                }
-        
-                #infoPanel {
-                    position: fixed;
-                    right: 0;  /* This ensures that the panel is pushed all the way to the right of the screen */
-                    width: 27%;
-                    height: 100vh;
-                    background-color: #ffffff;
-                    padding:10px;
-                }
-        
-                #infoPanel h1 {
-                    font-size: 24px;
-                    margin-top: 0;
-                }
-        
-                #logo {
-                    width: 100%;
-                    text-align: center;
-                    margin: 20px 0;
-                }
-        
-                #description {
-                    margin: 20px 0;
-                }
-        
-                #graph {
-                    width: 100%;
-                    max-width: 50; /* Adjust as needed */
-                    height: 50; /* Making it square */
-                    border: 1px solid #ffffff00;
-                    margin: 20px auto;
-                    overflow-y: auto;
-                    border-radius: 10px; /* Similar to the previous sidebar */
-                }
-
-                #slider-container {
-                    top: 445px;
-                    right: 45px;
-                    padding: 10px;
-                    background-color: rgba(255, 255, 255, 0.8);
-                    border-radius: 5px;
-                    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-                    width: 150px;  /* Adjust this value to your desired width */
-                }
-                
-                
-                #month-slider {
-                    width: 50%;          /* Make it span the width of the container */
-                    margin: 10px 0;       /* Some margin for better spacing */
-                }
-                
-                #month-display {
-                    font-weight: bold;    /* Make the month name bold */
-                    color: #333;          /* Slightly dark color for visibility */
-                }
-
-                #legend {
-                    margin-top: 0px;
-                    border: 1px solid #e1e1e1;
-                    padding: 5px;  /* reduce the padding */
-                    border-radius: 8px;
-                    background-color: #f9f9f9;
-                    box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
-                    width: 150px;  /* you can set a specific width if you want */
-                }
-                
-                #legend h3 {
-                    font-size: 14px;  /* reduce the font-size */
-                    font-weight: 600;
-                    margin-top: 0;
-                    border-bottom: 1px solid #e1e1e1;
-                    padding-bottom: 5px;  /* reduce the padding-bottom */
-                }
-                
-                #legendCanvas {
-                    width: 100%;
-                    height: 20px;
-                    border-radius: 5px;
-                    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-                    margin: 5px 0;  /* reduce the margin */
-                }
-                
-                #legendLabels {
-                    display: flex;
-                    justify-content: space-between;
-                    font-size: 10px;
-                    color: #666;
-                }
-                
-                #legendLabels span {
-                    font-weight: 200;
-                }
-                
-                #side-controls {
-                    display: flex;           /* Set this as a flex container */
-                    align-items: start;      /* Align items to the start (top) */
-                    gap: 15px;               /* Gap between the slider and the legend */
-                }
-                
-                #slider-container {
-                    order: 1;                /* Set order if you want the slider to appear first */
-                    /* ... (rest of your styles) */
-                }
-                
-                #legend {
-                    order: 2;                /* Set order if you want the legend to appear after the slider */
-                    /* ... (rest of your styles) */
-                }
-            </style>
-    
-
-        </head>
-
-        <body>
-
-            <div id="map">
-                <div id="popup" class="ol-popup">
-                    <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-                    <div id="popup-content"></div>
-                </div>
-            </div>
-        
-            <!-- Information panel on the right side -->
-            <div id="infoPanel">
-                <h1>Class-Specific Temporal Anomaly Detection in Land Surface Temperature</h1>
-        
-                <div id="logo">
-                    <img src="images/Termatics_full_logo.png" alt="Logo" height="40">
-                </div>
-        
-                <div id="description">
-                    <!-- Description -->
-                    <p>
-                        This demo showcases detailed measurements from <strong>Landsat 8 TIRs</strong> sensors to illuminate temporal anomalies in land surface temperatures with respect to a baseline temperature map from the period 2013-2018.
-                    </p>
-                    <p>
-                        <strong>Features:</strong>
-                        <ul>
-                            <li><strong>Honeycomb Layering:</strong> Each hexagonal cell symbolizes an aggregated max LST value, offering a detailed and granular representation of land surface temperatures over specific regions.</li>
-                            <li><strong>Corine Land Cover Classification:</strong> Integrated with data from the Corine land cover database, users can filter and view temperature data based on specific classifications such as 'industry', allowing for a more targeted analysis of temperature distributions over these areas.</li>
-                            <li><strong>Interactive Exploration:</strong> Beyond static visualization, users can interact with individual hexagons. This interactive feature provides in-depth graphs depicting temporal values over months, which proves essential for pinpointing anomalies against the baseline.</li>
-                        </ul>
-                    </p>
-                     
-                    <!-- Graph inside the description -->
-                    <div id="graph">
-                        <!-- Your graph plotting goes here -->
-                    </div>
-                    <div id="side-controls">
-                        <div id="slider-container">
-                            <label for="month-slider">Select Month: </label>
-                            <input type="range" id="month-slider" min="0" max="11" step="1" value="0">
-                            <span id="month-display">January</span>
+            <!DOCTYPE html>
+            <html lang="en">
+            
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Responsive Page</title>
+            
+                <style>
+                    body, html {
+                        margin: 0;
+                        padding: 0;
+                        font-family: Arial, sans-serif;
+                    }
+            
+                    #map {
+                        flex: 3;
+                        height: 100vh;
+                        border-right: 1px solid #ffffff;
+                    }
+            
+                    #infoPanel {
+                        flex: 1;
+                        background-color: #ffffff;
+                        padding: 1rem;
+                        height: 100vh;
+                        overflow-y: auto;
+                    }
+            
+                    #infoPanel h1 {
+                        font-size: 1.5rem;
+                        margin-top: 0;
+                    }
+            
+                    #logo {
+                        width: 100%;
+                        text-align: center;
+                        margin: 1rem 0;
+                    }
+            
+                    #description {
+                        margin: 1rem 0;
+                    }
+            
+                    #graph {
+                        width: 100%;
+                        height: 25rem; 
+                        border: 1px solid transparent;
+                        margin: 1rem auto;
+                        overflow-y: auto;
+                        border-radius: 0.5rem;
+                    }
+            
+                    #side-controls {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 1rem;
+                    }
+            
+                    #slider-container, #legend {
+                        background-color: rgba(255, 255, 255, 0.8);
+                        border-radius: 0.5rem;
+                        box-shadow: 0px 0px 0.5rem rgba(0, 0, 0, 0.2);
+                        padding: 0.5rem;
+                    }
+            
+                    #month-slider {
+                        width: 100%; 
+                        margin: 0.5rem 0;
+                    }
+            
+                    #month-display {
+                        font-weight: bold;
+                        color: #333;
+                    }
+            
+                    #legend h3 {
+                        font-size: 1rem;
+                        font-weight: 600;
+                        margin-top: 0;
+                        border-bottom: 1px solid #e1e1e1;
+                        padding-bottom: 0.5rem;
+                    }
+            
+                    #legendCanvas {
+                        width: 100%;
+                        height: 1rem;
+                        border-radius: 0.25rem;
+                        box-shadow: inset 0 1px 0.2rem rgba(0, 0, 0, 0.1);
+                        margin: 0.2rem 0;
+                    }
+            
+                    #legendLabels {
+                        display: flex;
+                        justify-content: space-between;
+                        font-size: 0.75rem;
+                        color: #666;
+                    }
+            
+                    #side-controls select {
+                        width: 100%;
+                    }
+            
+                    @media screen and (max-width: 768px) {
+                        #map, #infoPanel {
+                            flex: none;
+                            width: 100%;
+                        }
+                    }
+            
+                    .container {
+                        display: flex;
+                        flex-wrap: wrap;
+                    }
+                </style>
+            </head>
+            
+            <body>
+                <div class="container">
+                    <div id="map">
+                        <div id="popup" class="ol-popup">
+                            <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+                            <div id="popup-content"></div>
                         </div>
-
-                        <div id="legend">
-                            <h3>Color Legend</h3>
-                            <canvas id="legendCanvas" width="250" height="40"></canvas>
-                            <div id="legendLabels">
-                                <span id="minValue"></span>
-                                <span id="maxValue" style="float: right;"></span>
+                    </div>
+            
+                    <div id="infoPanel">
+                        <h1>Class-Specific Temporal Anomaly Detection in Land Surface Temperature</h1>
+            
+                        <div id="logo">
+                            <img src="images/Termatics_full_logo.png" alt="Logo" height="40">
+                        </div>
+            
+                        <div id="description">
+                            <p>
+                                This demo showcases detailed measurements from <strong>Landsat 8 TIRs</strong> sensors to illuminate temporal anomalies in land surface temperatures with respect to a baseline temperature map from the period 2013-2018.
+                            </p>
+                            <p>
+                                <strong>Features:</strong>
+                                <ul>
+                                    <li><strong>Honeycomb Layering:</strong> Each hexagonal cell symbolizes an aggregated max LST value, offering a detailed and granular representation of land surface temperatures over specific regions.</li>
+                                    <li><strong>Corine Land Cover Classification:</strong> Integrated with data from the Corine land cover database, users can filter and view temperature data based on specific classifications such as 'industry', allowing for a more targeted analysis of temperature distributions over these areas.</li>
+                                    <li><strong>Interactive Exploration:</strong> Beyond static visualization, users can interact with individual hexagons. This interactive feature provides in-depth graphs depicting temporal values over months, which proves essential for pinpointing anomalies against the baseline.</li>
+                                </ul>
+                            </p>
+                            <div id="graph"></div>
+                            <div id="side-controls">
+                                <div id="slider-container">
+                                    <label for="month-slider">Select Month: </label>
+                                    <input type="range" id="month-slider" min="0" max="11" step="1" value="0">
+                                    <span id="month-display">January</span>
+                                </div>
+            
+                                <div id="legend">
+                                    <h3>Color Legend</h3>
+                                    <canvas id="legendCanvas" width="250" height="40"></canvas>
+                                    <div id="legendLabels">
+                                        <span id="minValue"></span>
+                                        <span id="maxValue"></span>
+                                    </div>
+                                </div>
+                                <select id="yearSelector">
+                                    <option value="2019">2019</option>
+                                    <option value="2020">2020</option>
+                                </select>
                             </div>
                         </div>
-                        <select id="yearSelector">
-                            <option value="2019">2019</option>
-                            <option value="2020">2020</option>
-                            <!-- Add more years as needed -->
-                        </select>
-                        
+                    </div>
                 </div>
-            </div>        
-
-
+            
+            
 
         
         

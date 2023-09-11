@@ -149,7 +149,7 @@ function renderTimeSeries(mean_series, std_series, obs_series) {
     };
 
     const color = d3.scaleOrdinal()
-    .domain(["Mean Baseline", "Variation Range", "In range", "Anomaly"])
+    .domain(["Baseline", "Range", "In range", "Anomaly"])
     .range(["blue", "orange", "green", "red"]);
 
     // Assuming these are the months. Adjust as needed.
@@ -252,44 +252,44 @@ function renderTimeSeries(mean_series, std_series, obs_series) {
             .attr("stroke-width", "1px");
 
 
-// Add a frame (white background) for the legend
+// Reduced the size of the enclosing rectangle
 svg.append("rect")
-    .attr("x", width - 110)  // Adjust position and size as needed
-    .attr("y", + 10)
-    .attr("width", 90)
-    .attr("height", color.domain().length * 20 )
+    .attr("x", width - 85)  // Adjust position and size as needed
+    .attr("y", 10)
+    .attr("width", 65)   // Reduced width
+    .attr("height", color.domain().length * 15 )  // Reduced height per item
     .style("fill", "white")
     .style("stroke", "black")
     .style("stroke-width", "1px");
 
-//... (the rest of your code)
+var legendSpacing = 15;  // Reduced the spacing between legend items
 
 var legend = svg.selectAll(".legend")
     .data(color.domain())
     .enter().append("g")
     .attr("class", "legend")
-    .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+    .attr("transform", function(d, i) { return "translate(0," + i * legendSpacing + ")"; });  // Used legendSpacing
 
-// Append rectangles for the first elements
+// Use line instead of rect for the first set of legend items
 legend.filter(function(d, i) { return i < color.domain().length - 2; })
-    .append("rect")
-    .attr("x", width - 40) 
-    .attr("y", +15)
-    .attr("width", 5)
-    .attr("height", 5)
-    .style("fill", color);
+    .append("line")
+    .attr("x1", width - 35)  // Define the starting point of line (x-coordinate)
+    .attr("y1", 14)          // Define the starting point of line (y-coordinate)
+    .attr("x2", width - 25)  // Define the ending point of line (x-coordinate)
+    .attr("y2", 14)          // Define the ending point of line (y-coordinate)
+    .style("stroke", color)
+    .style("stroke-width", "2px");  // Adjust stroke width as necessary
 
-// Append circles for the last two elements
 legend.filter(function(d, i) { return i >= color.domain().length - 2; })
     .append("circle")
-    .attr("cx", width - 40 + 2.5) // The "+2.5" part is to center the circle
-    .attr("cy", +15 + 2.5)  // The "+2.5" part is to center the circle
-    .attr("r", 2.5)  // Radius to match the rectangle size
+    .attr("cx", width - 30 + 2.5)
+    .attr("cy", 12 + 2.5)  // Adjusted y-value
+    .attr("r", 2.5)
     .style("fill", color);
 
 legend.append("text")
-    .attr("x", width - 50)
-    .attr("y", 20)
+    .attr("x", width - 40)
+    .attr("y", 15)  // Adjusted y-value for text
     .attr("dy", ".35em")
     .style("text-anchor", "end")
     .style("font-size", "8px")
@@ -319,7 +319,7 @@ legend.append("text")
 svg.append("text")
     .attr("class", "ylabel")
     .attr("transform", "rotate(-90)")
-    .attr("y", margins.left * +0.5)  // Adjusted position relative to the left margin
+    .attr("y", margins.left * +0.45)  // Adjusted position relative to the left margin
     .attr("x", -(height / 2))  // Centers the label in the middle of the chart height
     .attr("dy", "-1em")  // Adjusts the vertical position relative to the rotation point
     .style("text-anchor", "middle")

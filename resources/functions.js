@@ -149,7 +149,7 @@ function renderTimeSeries(mean_series, std_series, obs_series) {
     };
 
     const color = d3.scaleOrdinal()
-    .domain(["Mean Baseline", "Variation Range", "In range", "Out Range"])
+    .domain(["Mean Baseline", "Variation Range", "In range", "Anomaly"])
     .range(["blue", "orange", "green", "red"]);
 
     // Assuming these are the months. Adjust as needed.
@@ -262,25 +262,37 @@ svg.append("rect")
     .style("stroke", "black")
     .style("stroke-width", "1px");
 
+//... (the rest of your code)
+
 var legend = svg.selectAll(".legend")
     .data(color.domain())
     .enter().append("g")
     .attr("class", "legend")
     .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
-legend.append("rect")
-    .attr("x", width - 40)  // Adjusted the x position
-    .attr("y", +15)  // Adjusted the y position
-    .attr("width", 5)  // Making it smaller
-    .attr("height", 5)  // Making it smaller
+// Append rectangles for the first elements
+legend.filter(function(d, i) { return i < color.domain().length - 2; })
+    .append("rect")
+    .attr("x", width - 40) 
+    .attr("y", +15)
+    .attr("width", 5)
+    .attr("height", 5)
+    .style("fill", color);
+
+// Append circles for the last two elements
+legend.filter(function(d, i) { return i >= color.domain().length - 2; })
+    .append("circle")
+    .attr("cx", width - 40 + 2.5) // The "+2.5" part is to center the circle
+    .attr("cy", +15 + 2.5)  // The "+2.5" part is to center the circle
+    .attr("r", 2.5)  // Radius to match the rectangle size
     .style("fill", color);
 
 legend.append("text")
-    .attr("x", width - 50)  // Adjusted the x position to match the smaller square
-    .attr("y", 20)  // Centering the text vertically with the smaller square
+    .attr("x", width - 50)
+    .attr("y", 20)
     .attr("dy", ".35em")
     .style("text-anchor", "end")
-    .style("font-size", "8px")  // Adjusting the font size to be even smaller
+    .style("font-size", "8px")
     .text(function(d) { return d; });
 
 
@@ -303,15 +315,17 @@ legend.append("text")
         .style("text-anchor", "middle")
         .text("Your X Axis Label");
 
-    // Y Axis label
-    svg.append("text")
-        .attr("class", "ylabel")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 0)
-        .attr("x", 0-150 )
-        .attr("dy", "1em")
-        .style("text-anchor", "middle")
-        .text("Temperature (K)");
+// Y Axis label
+svg.append("text")
+    .attr("class", "ylabel")
+    .attr("transform", "rotate(-90)")
+    .attr("y", margins.left * +0.5)  // Adjusted position relative to the left margin
+    .attr("x", -(height / 2))  // Centers the label in the middle of the chart height
+    .attr("dy", "-1em")  // Adjusts the vertical position relative to the rotation point
+    .style("text-anchor", "middle")
+    .style("font-size", "10px")  // Adjust the font size here
+    .text("Temperature (K)");
+
     }
 
 

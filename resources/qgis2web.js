@@ -38,18 +38,6 @@ layerSwitcher.element.classList.add('ol-control-bottom-left');
 // Expand the layer switcher panel after adding to the map
 layerSwitcher.showPanel();
 
-// Override the LayerSwitcher's default behavior for several events
-['click', 'mouseover', 'mouseout'].forEach(function(evtType) {
-    layerSwitcher.element.addEventListener(evtType, function(event) {
-        event.stopPropagation();
-        layerSwitcher.showPanel(); // Ensure it remains open
-    });
-});
-
-// Prevent the LayerSwitcher from reacting to a map click or hover, which could close it
-map.getTargetElement().addEventListener('click', function(event) {
-    event.stopPropagation();
-});
 
 map.getView().fit([1422944.660449, 6051803.232526, 1458485.014839, 6095131.002836], map.getSize());
 
@@ -94,154 +82,6 @@ var featureOverlay = new ol.layer.Vector({
 var doHighlight = false;
 var doHover = false;
 
-var highlight;
-var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
-var onPointerMove = function(evt) {
-    if (!doHover && !doHighlight) {
-        return;
-    }
-    var pixel = map.getEventPixel(evt.originalEvent);
-    var coord = evt.coordinate;
-    var popupField;
-    var currentFeature;
-    var currentLayer;
-    var currentFeatureKeys;
-    var clusteredFeatures;
-    var popupText = '<ul>';
-    map.forEachFeatureAtPixel(pixel, function(feature, layer) {
-        // We only care about features from layers in the layersList, ignore
-        // any other layers which the map might contain such as the vector
-        // layer used by the measure tool
-        if (layersList.indexOf(layer) === -1) {
-            return;
-        }
-        var doPopup = false;
-        for (k in layer.get('fieldImages')) {
-            if (layer.get('fieldImages')[k] != "Hidden") {
-                doPopup = true;
-            }
-        }
-        currentFeature = feature;
-        currentLayer = layer;
-        clusteredFeatures = feature.get("features");
-        var clusterFeature;
-        if (typeof clusteredFeatures !== "undefined") {
-            if (doPopup) {
-                for(var n=0; n<clusteredFeatures.length; n++) {
-                    clusterFeature = clusteredFeatures[n];
-                    currentFeatureKeys = clusterFeature.getKeys();
-                    popupText += '<li><table>'
-                    for (var i=0; i<currentFeatureKeys.length; i++) {
-                        if (currentFeatureKeys[i] != 'geometry') {
-                            popupField = '';
-                            if (layer.get('fieldLabels')[currentFeatureKeys[i]] == "inline label") {
-                            popupField += '<th>' + layer.get('fieldAliases')[currentFeatureKeys[i]] + ':</th><td>';
-                            } else {
-                                popupField += '<td colspan="2">';
-                            }
-                            if (layer.get('fieldLabels')[currentFeatureKeys[i]] == "header label") {
-                                popupField += '<strong>' + layer.get('fieldAliases')[currentFeatureKeys[i]] + ':</strong><br />';
-                            }
-                            if (layer.get('fieldImages')[currentFeatureKeys[i]] != "ExternalResource") {
-                                popupField += (clusterFeature.get(currentFeatureKeys[i]) != null ? autolinker.link(clusterFeature.get(currentFeatureKeys[i]).toLocaleString()) + '</td>' : '');
-                            } else {
-                                popupField += (clusterFeature.get(currentFeatureKeys[i]) != null ? '<img src="images/' + clusterFeature.get(currentFeatureKeys[i]).replace(/[\\\/:]/g, '_').trim()  + '" /></td>' : '');
-                            }
-                            popupText += '<tr>' + popupField + '</tr>';
-                        }
-                    } 
-                    popupText += '</table></li>';    
-                }
-            }
-        } else {
-            currentFeatureKeys = currentFeature.getKeys();
-            if (doPopup) {
-                popupText += '<li><table>';
-                for (var i=0; i<currentFeatureKeys.length; i++) {
-                    if (currentFeatureKeys[i] != 'geometry') {
-                        popupField = '';
-                        if (layer.get('fieldLabels')[currentFeatureKeys[i]] == "inline label") {
-                            popupField += '<th>' + layer.get('fieldAliases')[currentFeatureKeys[i]] + ':</th><td>';
-                        } else {
-                            popupField += '<td colspan="2">';
-                        }
-                        if (layer.get('fieldLabels')[currentFeatureKeys[i]] == "header label") {
-                            popupField += '<strong>' + layer.get('fieldAliases')[currentFeatureKeys[i]] + ':</strong><br />';
-                        }
-                        if (layer.get('fieldImages')[currentFeatureKeys[i]] != "ExternalResource") {
-                            popupField += (currentFeature.get(currentFeatureKeys[i]) != null ? autolinker.link(currentFeature.get(currentFeatureKeys[i]).toLocaleString()) + '</td>' : '');
-                        } else {
-                            popupField += (currentFeature.get(currentFeatureKeys[i]) != null ? '<img src="images/' + currentFeature.get(currentFeatureKeys[i]).replace(/[\\\/:]/g, '_').trim()  + '" /></td>' : '');
-                        }
-                        popupText += '<tr>' + popupField + '</tr>';
-                    }
-                }
-                popupText += '</table></li>';
-            }
-        }
-    });
-    if (popupText == '<ul>') {
-        popupText = '';
-    } else {
-        popupText += '</ul>';
-    }
-
-    if (doHighlight) {
-        if (currentFeature !== highlight) {
-            if (highlight) {
-                featureOverlay.getSource().removeFeature(highlight);
-            }
-            if (currentFeature) {
-                var styleDefinition = currentLayer.getStyle().toString();
-
-                if (currentFeature.getGeometry().getType() == 'Point') {
-                    var radius = styleDefinition.split('radius')[1].split(' ')[1];
-
-                    highlightStyle = new ol.style.Style({
-                        image: new ol.style.Circle({
-                            fill: new ol.style.Fill({
-                                color: "#ffff00"
-                            }),
-                            radius: radius
-                        })
-                    })
-                } else if (currentFeature.getGeometry().getType() == 'LineString') {
-
-                    var featureWidth = styleDefinition.split('width')[1].split(' ')[1].replace('})','');
-
-                    highlightStyle = new ol.style.Style({
-                        stroke: new ol.style.Stroke({
-                            color: '#ffff00',
-                            lineDash: null,
-                            width: featureWidth
-                        })
-                    });
-
-                } else {
-                    highlightStyle = new ol.style.Style({
-                        fill: new ol.style.Fill({
-                            color: '#ffff00'
-                        })
-                    })
-                }
-                featureOverlay.getSource().addFeature(currentFeature);
-                featureOverlay.setStyle(highlightStyle);
-            }
-            highlight = currentFeature;
-        }
-    }
-
-    if (doHover) {
-        if (popupText) {
-            overlayPopup.setPosition(coord);
-            content.innerHTML = popupText;
-            container.style.display = 'block';        
-        } else {
-            container.style.display = 'none';
-            closer.blur();
-        }
-    }
-};
 
 
 var selectedFeature;
@@ -283,19 +123,6 @@ map.on('singleclick', function(evt) {
     }
 });
 
-document.getElementById('yearSelector').addEventListener('change', function() {
-    if (selectedFeature) { // Only update if there's a selected feature
-        var year = this.value;
-        var obsVariableName = 'obs_series_' + year;
-
-        var hexData = selectedFeature.getProperties();
-        var meanSeries = hexData.mean_series;
-        var stdSeries = hexData.std_series;
-        var obsSeries = hexData[obsVariableName];
-
-        renderTimeSeries(meanSeries, stdSeries, obsSeries);
-    }
-});
 
 
 
@@ -308,14 +135,17 @@ const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
 
 window.onload = function() {
     // When the page loads, set the initial legend for January (index 0)
+    var year = document.getElementById('yearSelector').value; // Get the selected year from the dropdown
+
     const initialMonthIndex = 0;
-    setLegendForMonth(initialMonthIndex);
+    setLegendForMonth(initialMonthIndex,year);
 };
 
 
-function setLegendForMonth(monthIndex) {
+function setLegendForMonth(monthIndex,year) {
     // Recalculate means for selected month
-    const calculateMeans = (features) => features.map(feature => feature.get('mean_series')[monthIndex]);
+    const calculateMeans = (features) => features.map(feature => feature.get('obs_series_' + year)[monthIndex]);
+    console.log('mean_series_' + year)
 
     const firstMeans_industry = calculateMeans(features_Industry);
     const firstMeans_Forest = calculateMeans(features_Forest);
@@ -334,7 +164,7 @@ function setLegendForMonth(monthIndex) {
 
     lyr_Forest.setStyle(style_Forest);
     lyr_Forest.changed();
-
+    year
     lyr_urban.setStyle(style_Forest);
     lyr_urban.changed();
 
@@ -343,7 +173,29 @@ function setLegendForMonth(monthIndex) {
 
 
 slider.addEventListener('input', function() {
+    var year = document.getElementById('yearSelector').value; // Get the selected year from the dropdown
     const selectedMonth = parseInt(slider.value);
     monthDisplay.textContent = months[selectedMonth];
-    setLegendForMonth(selectedMonth);
+    setLegendForMonth(selectedMonth, year);
+});
+
+
+document.getElementById('yearSelector').addEventListener('change', function() {
+    var year = this.value;
+    const slider = document.getElementById("month-slider");
+
+    const selectedMonth = parseInt(slider.value);
+    if (selectedFeature) { // Only update if there's a selected feature
+        var year = this.value;
+        var obsVariableName = 'obs_series_' + year;
+
+        var hexData = selectedFeature.getProperties();
+        var meanSeries = hexData.mean_series;
+        var stdSeries = hexData.std_series;
+        var obsSeries = hexData[obsVariableName];
+
+        renderTimeSeries(meanSeries, stdSeries, obsSeries);
+    }
+
+    setLegendForMonth(selectedMonth, year);
 });

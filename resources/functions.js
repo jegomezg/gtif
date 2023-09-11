@@ -149,8 +149,8 @@ function renderTimeSeries(mean_series, std_series, obs_series) {
     };
 
     const color = d3.scaleOrdinal()
-    .domain(["Mean", "Lower Bound", "Observed", "Observed"])
-    .range(["blue", "red", "green", "red"]);
+    .domain(["Mean Baseline", "Variation Range", "In range", "Out Range"])
+    .range(["blue", "orange", "green", "red"]);
 
     // Assuming these are the months. Adjust as needed.
     const months = ["Jan","Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -193,7 +193,7 @@ function renderTimeSeries(mean_series, std_series, obs_series) {
     svg.append("path")
         .datum(mean_series)
         .attr("d", upperBoundLine)
-        .attr("stroke", "red")
+        .attr("stroke", "orange")
         .attr("stroke-dasharray", "5,5")
         .attr("fill", "none");
 
@@ -201,7 +201,7 @@ function renderTimeSeries(mean_series, std_series, obs_series) {
     svg.append("path")
         .datum(mean_series)
         .attr("d", lowerBoundLine)
-        .attr("stroke", "red")
+        .attr("stroke", "orange")
         .attr("stroke-dasharray", "5,5")
         .attr("fill", "none");
 
@@ -257,7 +257,7 @@ svg.append("rect")
     .attr("x", width - 110)  // Adjust position and size as needed
     .attr("y", + 10)
     .attr("width", 90)
-    .attr("height", color.domain().length * 20 + 10)
+    .attr("height", color.domain().length * 20 )
     .style("fill", "white")
     .style("stroke", "black")
     .style("stroke-width", "1px");
@@ -269,15 +269,15 @@ var legend = svg.selectAll(".legend")
     .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
 legend.append("rect")
-    .attr("x", width - 50)  // Adjusted the x position
+    .attr("x", width - 40)  // Adjusted the x position
     .attr("y", +15)  // Adjusted the y position
-    .attr("width", 15)  // Making it smaller
-    .attr("height", 15)  // Making it smaller
+    .attr("width", 5)  // Making it smaller
+    .attr("height", 5)  // Making it smaller
     .style("fill", color);
 
 legend.append("text")
-    .attr("x", width - 60)  // Adjusted the x position to match the smaller square
-    .attr("y", 25)  // Centering the text vertically with the smaller square
+    .attr("x", width - 50)  // Adjusted the x position to match the smaller square
+    .attr("y", 20)  // Centering the text vertically with the smaller square
     .attr("dy", ".35em")
     .style("text-anchor", "end")
     .style("font-size", "8px")  // Adjusting the font size to be even smaller

@@ -145,7 +145,7 @@ function renderTimeSeries(mean_series, std_series, obs_series) {
         top: height * 0.02,     // 5% of height
         right: width * 0.02,    // 4% of width
         bottom: height * 0.1,   // 10% of height
-        left: width * 0.1       // 10% of width
+        left: width * 0.11     // 10% of width
     };
 
     const color = d3.scaleOrdinal()
@@ -274,22 +274,22 @@ var legend = svg.selectAll(".legend")
 legend.filter(function(d, i) { return i < color.domain().length - 2; })
     .append("line")
     .attr("x1", width - 35)  // Define the starting point of line (x-coordinate)
-    .attr("y1", 14)          // Define the starting point of line (y-coordinate)
+    .attr("y1", 16)          // Define the starting point of line (y-coordinate)
     .attr("x2", width - 25)  // Define the ending point of line (x-coordinate)
-    .attr("y2", 14)          // Define the ending point of line (y-coordinate)
+    .attr("y2", 16)          // Define the ending point of line (y-coordinate)
     .style("stroke", color)
     .style("stroke-width", "2px");  // Adjust stroke width as necessary
 
 legend.filter(function(d, i) { return i >= color.domain().length - 2; })
     .append("circle")
     .attr("cx", width - 30 + 2.5)
-    .attr("cy", 12 + 2.5)  // Adjusted y-value
+    .attr("cy", 16 + 2.5)  // Adjusted y-value
     .attr("r", 2.5)
     .style("fill", color);
 
 legend.append("text")
     .attr("x", width - 40)
-    .attr("y", 15)  // Adjusted y-value for text
+    .attr("y", 16)  // Adjusted y-value for text
     .attr("dy", ".35em")
     .style("text-anchor", "end")
     .style("font-size", "8px")
@@ -319,7 +319,7 @@ legend.append("text")
 svg.append("text")
     .attr("class", "ylabel")
     .attr("transform", "rotate(-90)")
-    .attr("y", margins.left * +0.45)  // Adjusted position relative to the left margin
+    .attr("y", margins.left * +0.5)  // Adjusted position relative to the left margin
     .attr("x", -(height / 2))  // Centers the label in the middle of the chart height
     .attr("dy", "-1em")  // Adjusts the vertical position relative to the rotation point
     .style("text-anchor", "middle")

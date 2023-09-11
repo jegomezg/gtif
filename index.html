@@ -70,7 +70,7 @@
                     #infoPanel {
                         flex: 1;
                         background-color: #ffffff;
-                        padding: 1rem;
+                        padding: 0.5rem;
                         height: 100vh;
                         overflow-y: auto;
                     }
@@ -198,7 +198,10 @@
                                     <input type="range" id="month-slider" min="0" max="11" step="1" value="0">
                                     <span id="month-display">January</span>
                                 </div>
-            
+                                <select id="yearSelector">
+                                    <option value="2019">2019</option>
+                                    <option value="2020">2020</option>
+                                </select>
                                 <div id="legend">
                                     <h3>Color Legend</h3>
                                     <canvas id="legendCanvas" width="250" height="40"></canvas>
@@ -207,10 +210,7 @@
                                         <span id="maxValue"></span>
                                     </div>
                                 </div>
-                                <select id="yearSelector">
-                                    <option value="2019">2019</option>
-                                    <option value="2020">2020</option>
-                                </select>
+
                             </div>
                         </div>
                     </div>
